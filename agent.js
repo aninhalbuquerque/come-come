@@ -19,7 +19,7 @@ class Agent {
   }
   
   isInvalidPosition(x, y) {
-    return this.gameMap.grid[x][y] == OBSTACULO || (this.foodPos.x == x && this.foodPos.y == y)
+    return this.gameMap.grid[x][y] == OBSTACULO || (this.foodPos.x == x && this.foodPos.y == y);
   }
   
   drawAgent() {

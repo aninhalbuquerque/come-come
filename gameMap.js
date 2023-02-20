@@ -1,7 +1,8 @@
 class GameMap {
-  constructor(width, height, grid=null) {
+  constructor(width, height, grid=null, score=0) {
     this.width = width;
     this.height = height;
+    this.score = score;
     if (grid) this.grid = grid;
     else {
       this.grid = new Array(this.width);
@@ -24,6 +25,10 @@ class GameMap {
         rect(i*GRID_SIZE, j*GRID_SIZE, GRID_SIZE, GRID_SIZE);
       }
     }
+    
+    stroke(0);
+    fill(0);
+    text(`Pontuação: ${this.score}`, 525, 625);
   }
   
   createGrid(value) {

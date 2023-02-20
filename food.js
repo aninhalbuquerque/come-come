@@ -1,6 +1,7 @@
 class Food {
-  constructor(gameMap) {
+  constructor(gameMap, agentPos=null) {
     this.gameMap = gameMap;
+    this.agentPos = agentPos;
     this.generatePos();
   }
   
@@ -8,12 +9,19 @@ class Food {
     let x = floor(random(this.gameMap.width));
     let y = floor(random(this.gameMap.height));
     
-    while(this.gameMap.grid[x][y] == OBSTACULO) {
+    while(this.isInvalidPosition(x, y)) {
       x = floor(random(this.gameMap.width));
       y = floor(random(this.gameMap.height));
     }
     
     this.pos = {x, y};
+  }
+  
+  isInvalidPosition(x, y) {
+    if (this.agentPos) {
+      return this.gameMap.grid[x][y] == OBSTACULO || (this.agentPos.x == x && this.agentPos.y == y);
+    }
+    return this.gameMap.grid[x][y] == OBSTACULO;  
   }
   
   drawFood() {

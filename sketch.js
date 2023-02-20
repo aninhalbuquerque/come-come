@@ -24,60 +24,72 @@ let busca = null;
 let started = false;
 let showBusca = true;
 
+let estado = 'menu';
+
 function setup() {
-  createCanvas(GRID_SIZE*GRID_WIDTH, GRID_SIZE*GRID_HEIGHT);
+  createCanvas(GRID_SIZE*GRID_WIDTH + 50, GRID_SIZE*GRID_HEIGHT + 50);
   this.menu = new Menu();
 }
 
-function start(grid=null, agentPos=null) {
-  this.gameMap = new GameMap(GRID_WIDTH, GRID_HEIGHT, grid);
-  this.food = new Food(this.gameMap);
+function start(grid=null, agentPos=null, score=0) {
+  this.gameMap = new GameMap(GRID_WIDTH, GRID_HEIGHT, grid, score);
+  this.food = new Food(this.gameMap, agentPos);
   this.agent = new Agent(this.gameMap, this.food.pos, agentPos);
   
   //if (showBusca) this.calculateMethod();
   //else this.updateMethod();
   this.calculateMethod();
   this.index = 0;
-  if (showBusca) frameRate(30);
+  if (estado == 'busca') frameRate(30);
   else frameRate(5);
 }
 
 function draw() {
-  if(busca){
-    if (!started) {
-      this.start();
-      started = true;
-    } else {
-      if (showBusca) {
-        if (this.index+1 < this.method.path.length) {
-          this.index++;
-        } else {
-          this.index = 0;
-          showBusca = false;
-          frameRate(5);
-        }
-      } else {
-        if (this.index+1 < this.method.chosenPath.length) {
-          this.index++;
-        } else {
-          this.start(this.gameMap.grid, this.food.pos);
-        }
+  switch(estado) {
+    case 'menu':
+      if (busca) {
+        estado = 'busca';
+        this.start();
       }
-  
+      break;
+    
+    case 'busca':
+      if (this.index+1 < this.method.path.length) {
+        this.index++;
+      } else {
+        this.index = 0;
+        estado = 'caminho';
+        frameRate(5);
+      }
       this.display();
-    }
+      break;
+    
+    case 'caminho':
+      if (this.index+1 < this.method.chosenPath.length) {
+        this.index++;
+      } else {
+        this.start(this.gameMap.grid, this.food.pos, this.getNewScore());
+      }
+      this.display();
+      break;
   }
 }
 
 function display() {
+  this.clearMap();
   this.gameMap.drawGameMap();
   this.food.drawFood();
   this.agent.drawAgent();
   
-  if (showBusca) this.method.drawPath(this.index);
+  if (estado == 'busca') this.method.drawPath(this.index);
   else {
     this.method.drawChosenPath(this.index);
   }
+}
+
+function clearMap() {
+  clear();
+  background('#EBC5DB');
 }
   
 function mouseClicked() {
@@ -110,6 +122,10 @@ function calculateMethod() {
     this.method.calculatePath();
     this.method.calculateChosenPath();
   }
+}
+
+function getNewScore(){
+  return this.gameMap.score + (this.method.chosenPath.length > 0);
 }
 
 function updateMethod() {
