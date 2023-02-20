@@ -3,7 +3,8 @@ const GRID_WIDTH = 20;
 const GRID_HEIGHT = 20;
 
 const AGENTE = 0;
-const CAMINHO = 3;
+const BUSCA = 3;
+const CAMINHO = 4;
 
 const AREIA = 1;
 const ATOLEIRO = 5;
@@ -16,13 +17,14 @@ cores[ATOLEIRO] = '#AA907F';
 cores[AGUA] = '#20596B';
 cores[OBSTACULO] = '#010201';
 cores[AGENTE] = '#C71C1C';
-cores[CAMINHO] = '#C71C1C9E';
+cores[BUSCA] = '#2DC71C9E';
+cores[CAMINHO] = '#C71C1C89';
 
 let busca = null;
 let started = false;
+let showBusca = true;
 
 function setup() {
-  frameRate(5);
   createCanvas(GRID_SIZE*GRID_WIDTH, GRID_SIZE*GRID_HEIGHT);
   this.menu = new Menu();
 }
@@ -31,22 +33,37 @@ function start(grid=null, agentPos=null) {
   this.gameMap = new GameMap(GRID_WIDTH, GRID_HEIGHT, grid);
   this.food = new Food(this.gameMap);
   this.agent = new Agent(this.gameMap, this.food.pos, agentPos);
+  
+  //if (showBusca) this.calculateMethod();
+  //else this.updateMethod();
   this.calculateMethod();
   this.index = 0;
+  if (showBusca) frameRate(30);
+  else frameRate(5);
 }
 
 function draw() {
-  if(this.busca){
-    if (!this.started) {
+  if(busca){
+    if (!started) {
       this.start();
-      this.started = true;
+      started = true;
     } else {
-      if (this.index+1 < this.method.path.length) {
-        this.index++;
+      if (showBusca) {
+        if (this.index+1 < this.method.path.length) {
+          this.index++;
+        } else {
+          this.index = 0;
+          showBusca = false;
+          frameRate(5);
+        }
       } else {
-        this.start(this.gameMap.grid, this.food.pos);
+        if (this.index+1 < this.method.chosenPath.length) {
+          this.index++;
+        } else {
+          this.start(this.gameMap.grid, this.food.pos);
+        }
       }
-
+  
       this.display();
     }
   }
@@ -56,33 +73,48 @@ function display() {
   this.gameMap.drawGameMap();
   this.food.drawFood();
   this.agent.drawAgent();
-  this.method.drawPath(this.index);
+  
+  if (showBusca) this.method.drawPath(this.index);
+  else {
+    this.method.drawChosenPath(this.index);
+  }
 }
   
 function mouseClicked() {
-  this.busca = this.menu.choice(mouseX, mouseY);
+  busca = this.menu.choice(mouseX, mouseY);
 }
 
 function calculateMethod() {
-  if (this.busca == 'largura') {
+  if (busca == 'largura') {
     this.method = new BFS(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
+    this.method.calculateChosenPath();
   }
-  if (this.busca == 'profundidade') {
+  if (busca == 'profundidade') {
     this.method = new DFS(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath(this.method.origin);
+    this.method.calculateChosenPath();
   }
-  if (this.busca == 'custo uniforme') {
+  if (busca == 'custo uniforme') {
     this.method = new BFS(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
+    this.method.calculateChosenPath();
   }
-  if (this.busca == 'gulosa') {
+  if (busca == 'gulosa') {
     this.method = new BFS(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
+    this.method.calculateChosenPath();
   }
-  if (this.busca == 'a*') {
+  if (busca == 'a*') {
     this.method = new BFS(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
+    this.method.calculateChosenPath();
   }
+}
+
+function updateMethod() {
+  this.method.origin = this.agent.pos;
+  this.method.destiny = this.food.pos;
+  this.method.calculateChosenPath();
 }
 

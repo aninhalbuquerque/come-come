@@ -26,12 +26,12 @@ class GameMap {
     }
   }
   
-  createEmptyGrid() {
+  createGrid(value) {
     let newGrid = new Array(this.width);
     for (let i = 0; i < this.width; i++) {
       newGrid[i] = new Array(this.height);
       for (let j = 0; j < this.height; j++) {
-        newGrid[i][j] = 0;
+        newGrid[i][j] = value;
       }
     }
     
