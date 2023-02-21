@@ -84,7 +84,7 @@ function draw() {
           this.index++;
         }
       } else {
-        if (busca == 'gulosa') estado = 'busca';
+        if (busca == 'gulosa' || busca == 'a*') estado = 'busca';
         else estado = 'caminho';
         this.start(this.gameMap.grid, this.food.pos, this.getNewScore());
       }
@@ -139,7 +139,7 @@ function calculateMethod() {
     this.method.calculateChosenPath();
   }
   if (busca == 'a*') {
-    this.method = new BFS(this.agent.pos, this.food.pos, this.gameMap);
+    this.method = new AEstrela(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
     this.method.calculateChosenPath();
   }
