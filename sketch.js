@@ -12,7 +12,7 @@ const AGUA = 10;
 const OBSTACULO = 1000;
 
 const FRAME_RATE_BUSCA = 30;
-const FRAME_RATE_CAMINHO = 5;
+const FRAME_RATE_DESLOCAMENTO = 5;
 
 let cores = {};
 cores[AREIA] = '#e2cfa6';
@@ -43,8 +43,7 @@ function start(grid=null, agentPos=null, score=0) {
   
   this.calculateMethod();
   this.index = 0;
-  if (estado == 'busca') frameRate(FRAME_RATE_BUSCA);
-  else frameRate(FRAME_RATE_CAMINHO);
+  frameRate(FRAME_RATE_BUSCA);
 }
 
 function draw() {
@@ -62,20 +61,30 @@ function draw() {
       } else {
         this.index = 0;
         estado = 'caminho';
-        frameRate(FRAME_RATE_CAMINHO);
       }
       this.display();
       break;
     
     case 'caminho':
       if (this.index+1 < this.method.chosenPath.length) {
+        this.index++;
+      } else {
+        this.index = 0;
+        estado = 'deslocamento';
+        frameRate(FRAME_RATE_DESLOCAMENTO);
+      }
+      this.display();
+      break;
+      
+    case 'deslocamento':
+      if (this.index+1 < this.method.chosenPath.length) {
         if (this.blocksIndex()) block++;
         else {
           block = 0;
           this.index++;
-          //console.log('index: ' + str(this.index) + ' -> ' + str(this.method.chosenPath[this.index].x + ', ' + str(this.method.chosenPath[this.index].y)));
         }
       } else {
+        estado = 'caminho';
         this.start(this.gameMap.grid, this.food.pos, this.getNewScore());
       }
       this.display();
@@ -87,12 +96,15 @@ function display() {
   this.clearMap();
   this.gameMap.drawGameMap();
   this.food.drawFood();
-  this.agent.drawAgent();
   
   if (estado == 'busca') this.method.drawPath(this.index);
-  else {
-    this.method.drawChosenPath(this.index);
+  if (estado == 'caminho') this.method.drawChosenPath(this.index);
+  if (estado == 'deslocamento') {
+    this.method.drawChosenPath(this.method.chosenPath.length-1);
+    this.updateAgentPos();
   }
+  
+  this.agent.drawAgent();
 }
 
 function clearMap() {
@@ -142,9 +154,8 @@ function blocksIndex() {
   return block < type;
 }
 
-function updateMethod() {
-  this.method.origin = this.agent.pos;
-  this.method.destiny = this.food.pos;
-  this.method.calculateChosenPath();
+function updateAgentPos() {
+  this.agent.pos.x = this.method.chosenPath[this.index].x;
+  this.agent.pos.y = this.method.chosenPath[this.index].y;
 }
 

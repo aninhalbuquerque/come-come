@@ -44,7 +44,7 @@ class DFS {
         }
       }
     }
-    
+    this.chosenPath.push(pos);
     this.chosenPath = this.chosenPath.reverse();
   }
   
