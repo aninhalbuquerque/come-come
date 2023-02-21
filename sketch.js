@@ -128,7 +128,7 @@ function calculateMethod() {
     this.method.calculateChosenPath();
   }
   if (busca == 'custo uniforme') {
-    this.method = new BFS(this.agent.pos, this.food.pos, this.gameMap);
+    this.method = new CustoUniforme(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
     this.method.calculateChosenPath();
   }
