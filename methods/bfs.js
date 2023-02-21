@@ -5,7 +5,7 @@ class BFS {
     this.gameMap = gameMap;
     this.path = [];
     this.chosenPath = [];
-    this.ways = [[-1, 0], [0, -1], [1, 0], [0, 1]];
+    this.ways = [[-1, 0], [0, -1], [1, 0], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
   }
   
   calculatePath() {
@@ -40,13 +40,16 @@ class BFS {
     let pos = this.destiny;
     
     while (!this.isOrigin(pos)) {
+      //console.log('x: ' + str(pos.x) + ' y: ' + str(pos.y));
       this.chosenPath.push(pos);
       for (let i = 0; i < this.ways.length; i++) {
         let x = pos.x + this.ways[i][0];
         let y = pos.y + this.ways[i][1];
 
         if(this.validPosition(x, y) && this.getDist({x, y}) == this.getDist(pos)-1) {
+          //console.log('---------------> i: ' + str(i) +' x: ' + str(x) + ' y: ' + str(y));
           pos = {x, y};
+          break;
         }
       }
     }

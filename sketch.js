@@ -11,6 +11,9 @@ const ATOLEIRO = 5;
 const AGUA = 10;
 const OBSTACULO = 1000;
 
+const FRAME_RATE_BUSCA = 30;
+const FRAME_RATE_CAMINHO = 5;
+
 let cores = {};
 cores[AREIA] = '#e2cfa6';
 cores[ATOLEIRO] = '#AA907F';
@@ -26,6 +29,8 @@ let showBusca = true;
 
 let estado = 'menu';
 
+let block = 0;
+
 function setup() {
   createCanvas(GRID_SIZE*GRID_WIDTH + 50, GRID_SIZE*GRID_HEIGHT + 50);
   this.menu = new Menu();
@@ -36,12 +41,10 @@ function start(grid=null, agentPos=null, score=0) {
   this.food = new Food(this.gameMap, agentPos);
   this.agent = new Agent(this.gameMap, this.food.pos, agentPos);
   
-  //if (showBusca) this.calculateMethod();
-  //else this.updateMethod();
   this.calculateMethod();
   this.index = 0;
-  if (estado == 'busca') frameRate(30);
-  else frameRate(5);
+  if (estado == 'busca') frameRate(FRAME_RATE_BUSCA);
+  else frameRate(FRAME_RATE_CAMINHO);
 }
 
 function draw() {
@@ -59,14 +62,19 @@ function draw() {
       } else {
         this.index = 0;
         estado = 'caminho';
-        frameRate(5);
+        frameRate(FRAME_RATE_CAMINHO);
       }
       this.display();
       break;
     
     case 'caminho':
       if (this.index+1 < this.method.chosenPath.length) {
-        this.index++;
+        if (this.blocksIndex()) block++;
+        else {
+          block = 0;
+          this.index++;
+          //console.log('index: ' + str(this.index) + ' -> ' + str(this.method.chosenPath[this.index].x + ', ' + str(this.method.chosenPath[this.index].y)));
+        }
       } else {
         this.start(this.gameMap.grid, this.food.pos, this.getNewScore());
       }
@@ -126,6 +134,12 @@ function calculateMethod() {
 
 function getNewScore(){
   return this.gameMap.score + (this.method.chosenPath.length > 0);
+}
+
+function blocksIndex() {
+  let pos = this.method.chosenPath[this.index];
+  let type = this.gameMap.grid[pos.x][pos.y];
+  return block < type;
 }
 
 function updateMethod() {

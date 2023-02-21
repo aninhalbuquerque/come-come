@@ -5,12 +5,29 @@ class GameMap {
     this.score = score;
     if (grid) this.grid = grid;
     else {
-      this.grid = new Array(this.width);
-      this.costs = [AREIA, ATOLEIRO, AGUA, OBSTACULO];
-      for (let i = 0; i < width; i++) {
-        this.grid[i] = new Array(this.height);
-        for (let j = 0; j < height; j++) {
-          this.grid[i][j] = random(this.costs);
+      this.generateGrid();
+    }
+  }
+  
+  generateGrid() {
+    let noiseScale = 20.0;
+    let iterations = 1;
+    this.grid = new Array(this.width);
+    for (let i = 0; i < this.width; i++) {
+      this.grid[i] = new Array(this.height);
+      for (let j = 0; j < this.height; j++) {
+        let noiseVal = noise(i / noiseScale, j / noiseScale, iterations);
+        let chanceObstacle = random();
+        if (noiseVal < 0.3) {
+          this.grid[i][j] = AGUA;
+        } else if (noiseVal < 0.4) {
+          this.grid[i][j] = ATOLEIRO;
+        } else {
+          this.grid[i][j] = AREIA;
+        }
+        
+        if(chanceObstacle < 0.1){
+          this.grid[i][j] = OBSTACULO;
         }
       }
     }

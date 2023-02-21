@@ -5,7 +5,7 @@ class DFS {
     this.gameMap = gameMap;
     this.path = [];
     this.chosenPath = [];
-    this.ways = [[-1, 0], [0, -1], [1, 0], [0, 1]];
+    this.ways = [[-1, 0], [0, -1], [1, 0], [0, 1], [-1, -1], [-1, 1], [1, -1], [1, 1]];
     
     this.vis = this.gameMap.createGrid(0);
     this.dist = this.gameMap.createGrid(-1);
@@ -37,9 +37,10 @@ class DFS {
       for (let i = 0; i < this.ways.length; i++) {
         let x = pos.x + this.ways[i][0];
         let y = pos.y + this.ways[i][1];
-
+        
         if(this.validPosition(x, y) && this.getDist({x, y}) == this.getDist(pos)-1) {
           pos = {x, y};
+          break;
         }
       }
     }
@@ -99,6 +100,5 @@ class DFS {
   getDistToDestiny() {
     return this.dist[this.destiny.x][this.destiny.y];
   }
-  
   
 }
