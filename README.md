@@ -10,7 +10,7 @@ Repositório referente ao primeiro projeto da cadeira de Sistemas Inteligentes
 
 ## Execução
 
-[Editor do p5](https://editor.p5js.org/alas3/full/uxWR0nKV6)
+[Editor do p5](https://editor.p5js.org/obtmc/sketches/FwCvE6hkj)
 
 ## Relatório de Post-Mortem
 
