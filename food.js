@@ -27,7 +27,7 @@ class Food {
   drawFood() {
     rectMode(CORNER);
     stroke(0);
-    fill(255, 204, 0);
+    fill(cores[COMIDA]);
     rect(this.pos.x*GRID_SIZE, this.pos.y*GRID_SIZE, GRID_SIZE, GRID_SIZE);
   }
 }

@@ -5,13 +5,15 @@ const GRID_HEIGHT = 20;
 const AGENTE = 0;
 const BUSCA = 3;
 const CAMINHO = 4;
+const FRONTEIRA= 2
+const COMIDA= 6
 
 const AREIA = 1;
 const ATOLEIRO = 5;
 const AGUA = 10;
 const OBSTACULO = 1000;
 
-const FRAME_RATE_BUSCA = 30;
+const FRAME_RATE_BUSCA = 15;
 const FRAME_RATE_DESLOCAMENTO = 5;
 
 let cores = {};
@@ -22,6 +24,8 @@ cores[OBSTACULO] = '#010201';
 cores[AGENTE] = '#C71C1C';
 cores[BUSCA] = '#2DC71C9E';
 cores[CAMINHO] = '#C71C1C89';
+cores[COMIDA] = '#ffcc00';
+cores[FRONTEIRA] = '#AD52E9B5';
 
 let busca = null;
 let started = false;
@@ -38,6 +42,7 @@ function setup() {
 
 function start(grid=null, agentPos=null, score=0) {
   this.gameMap = new GameMap(GRID_WIDTH, GRID_HEIGHT, grid, score);
+  this.gameMap.busca = busca;
   this.food = new Food(this.gameMap, agentPos);
   this.agent = new Agent(this.gameMap, this.food.pos, agentPos);
   
@@ -84,8 +89,7 @@ function draw() {
           this.index++;
         }
       } else {
-        if (busca == 'gulosa' || busca == 'a*') estado = 'busca';
-        else estado = 'caminho';
+        estado = 'busca';
         this.start(this.gameMap.grid, this.food.pos, this.getNewScore());
       }
       this.display();
@@ -117,28 +121,36 @@ function mouseClicked() {
   busca = this.menu.choice(mouseX, mouseY);
 }
 
+function keyPressed() {
+  if (keyCode === ESCAPE) {
+    busca = null;
+    estado = 'menu';
+    this.menu = new Menu();
+  }
+}
+
 function calculateMethod() {
-  if (busca == 'largura') {
+  if (busca == 'Largura') {
     this.method = new BFS(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
     this.method.calculateChosenPath();
   }
-  if (busca == 'profundidade') {
+  if (busca == 'Profundidade') {
     this.method = new DFS(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath(this.method.origin);
     this.method.calculateChosenPath();
   }
-  if (busca == 'custo uniforme') {
+  if (busca == 'Custo Uniforme') {
     this.method = new CustoUniforme(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
     this.method.calculateChosenPath();
   }
-  if (busca == 'gulosa') {
+  if (busca == 'Gulosa') {
     this.method = new Gulosa(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
     this.method.calculateChosenPath();
   }
-  if (busca == 'a*') {
+  if (busca == 'A*') {
     this.method = new AEstrela(this.agent.pos, this.food.pos, this.gameMap);
     this.method.calculatePath();
     this.method.calculateChosenPath();

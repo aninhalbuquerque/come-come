@@ -3,6 +3,7 @@ class GameMap {
     this.width = width;
     this.height = height;
     this.score = score;
+    this.busca = '';
     if (grid) this.grid = grid;
     else {
       this.generateGrid();
@@ -45,7 +46,9 @@ class GameMap {
     
     stroke(0);
     fill(0);
-    text(`Pontuação: ${this.score}`, 525, 625);
+    textAlign(LEFT);
+    text(`Busca: ${this.busca}`, 20, 625);
+    text(`Pontuação: ${this.score}`, 400, 625);
   }
   
   createGrid(value) {

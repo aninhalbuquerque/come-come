@@ -27,11 +27,11 @@ class Menu {
   }
   
   choice(mouseX, mouseY) {
-    if (this.chooseLargura(mouseX, mouseY)) return 'largura';
-    if (this.chooseProfundidade(mouseX, mouseY)) return 'profundidade';
-    if (this.chooseCustoUniforme(mouseX, mouseY)) return 'custo uniforme';
-    if (this.chooseGulosa(mouseX, mouseY)) return 'gulosa';
-    if (this.chooseA(mouseX, mouseY)) return 'a*';
+    if (this.chooseLargura(mouseX, mouseY)) return 'Largura';
+    if (this.chooseProfundidade(mouseX, mouseY)) return 'Profundidade';
+    if (this.chooseCustoUniforme(mouseX, mouseY)) return 'Custo Uniforme';
+    if (this.chooseGulosa(mouseX, mouseY)) return 'Gulosa';
+    if (this.chooseA(mouseX, mouseY)) return 'A*';
     
     return null;
   }
