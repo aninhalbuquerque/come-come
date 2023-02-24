@@ -5,8 +5,8 @@ const GRID_HEIGHT = 20;
 const AGENTE = 0;
 const BUSCA = 3;
 const CAMINHO = 4;
-const FRONTEIRA= 2
-const COMIDA= 6
+const FRONTEIRA = 2;
+const COMIDA = 6;
 
 const AREIA = 1;
 const ATOLEIRO = 5;
@@ -118,7 +118,7 @@ function clearMap() {
 }
   
 function mouseClicked() {
-  busca = this.menu.choice(mouseX, mouseY);
+  if(estado === 'menu') busca = this.menu.choice(mouseX, mouseY);
 }
 
 function keyPressed() {
