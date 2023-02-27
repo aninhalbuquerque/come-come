@@ -10,7 +10,7 @@ Repositório referente ao primeiro projeto da cadeira de Sistemas Inteligentes
 
 ## Execução
 
-[Editor do p5](https://editor.p5js.org/obtmc/sketches/FwCvE6hkj)
+[Editor do p5](https://editor.p5js.org/alas3/full/uxWR0nKV6)
 
 ## Relatório de Post-Mortem
 
@@ -20,6 +20,9 @@ Repositório referente ao primeiro projeto da cadeira de Sistemas Inteligentes
     - Conhecimento de buscas - ficou mais claro o uso e diferenças de cada tipo de busca.
 
 2. Divisão do trabalho em grupo
+    - Menu, mapa, movimento do agente: Ana
+    - Buscas: Alice, Ana e Victória
+    - Refatoração: Enrique e Olívia
 
 3. Arquitetura e tecnologias utilizadas
     - p5.js
